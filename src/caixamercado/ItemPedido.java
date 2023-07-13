@@ -19,14 +19,15 @@ public class ItemPedido {
     private int qntd;
     private String produto_nome;
     private double precoTotal;
+    private int id_produto_has_pedido;
     
 
-    public ItemPedido(int id, int idPedido, int idProduto, int qntd, String produto_nome, double precoTotal) {
+    public ItemPedido(int id,int id_produto_has_pedido, int idPedido, int idProduto, int qntd, String produto_nome, double precoTotal) {
         this.id = id;
+        this.id_produto_has_pedido = id_produto_has_pedido;
         this.idPedido = idPedido;
         this.idProduto = idProduto;
         this.qntd = qntd;
-        
         this.produto_nome = produto_nome;
         this.precoTotal = precoTotal;
     }
@@ -45,6 +46,14 @@ public class ItemPedido {
 
     public void setPrecoTotal(double precoTotal) {
         this.precoTotal = precoTotal;
+    }
+
+    public int getId_produto_has_pedido() {
+        return id_produto_has_pedido;
+    }
+
+    public void setId_produto_has_pedido(int id_produto_has_pedido) {
+        this.id_produto_has_pedido = id_produto_has_pedido;
     }
     
     
@@ -85,27 +94,28 @@ public class ItemPedido {
     
     
     public void cadastrar(){
-        String sql = "INSERT into produto_has_pedido(qtd, precototal, produto_idproduto, pedido_idpedido) values( "
-                /*+ "" + this.getId_produto_has_pedido() + "," */
+        String sql = "INSERT into produto_has_pedido(id_produto_has_pedido, qtd, precototal, produto_idproduto, pedido_idpedido) values( "
+                + "" + this.getId_produto_has_pedido() + ","
                 + "" + this.getQntd() + ","
                 + "" + this.getPrecoTotal() + ","
                 + "" + this.getIdProduto() + ","
                 + "" + this.getIdPedido() + ")";
-        
+        System.out.println(sql);
         Conexao.executar(sql);
+        
     } 
     
-    /*
+    
     public void editar(){
-        String sql = "UPDATE produto_has_pedido SET"
+        String sql = "UPDATE produto_has_pedido SET "
                 + "produto_idproduto = " + this.getIdProduto() +","
                 + "pedido_idpedido = " + this.getIdPedido() + ","
                 + "qtd = " +this.getQntd()+","
                 + "precototal = " + this.getPrecoTotal() + ""
-                + "WHERE id_produto_has_pedido = " + this.getId_produto_has_pedido();
+                + " WHERE id_produto_has_pedido = " + this.getId();
         
         Conexao.executar(sql);
-    } */
+    } 
       
     public static void excluir(int id){
         String sql = "DELETE FROM produto_has_pedido WHERE id_produto_has_pedido = " + id;
@@ -114,7 +124,7 @@ public class ItemPedido {
     
     public static ArrayList<ItemPedido> getItensPedido(){
         ArrayList<ItemPedido> lista = new ArrayList();
-        String sql = "SELECT produto_has_pedido.id_produto_has_Pedido, produto.nome, produto.idproduto, produto.preco, produto_has_pedido.qtd, produto_has_pedido.precototal FROM produto_has_pedido, produto "
+        String sql = "SELECT produto_has_pedido.id_produto_has_Pedido, produto.nome, produto.idproduto, produto_has_pedido.qtd, produto_has_pedido.precototal FROM produto_has_pedido, produto "
                 + "WHERE produto_has_pedido.produto_idproduto = produto.idproduto "
                 + " ORDER BY id_produto_has_pedido";
         ResultSet rs = Conexao.consultar(sql);
@@ -127,11 +137,11 @@ public class ItemPedido {
                     int cod = rs.getInt("produto_has_pedido.id_produto_has_Pedido");
                     String produto_nome = rs.getString("produto.nome");
                     int id_produto = rs.getInt("produto.idproduto");
-                    double preco = rs.getDouble("produto.preco");
+                    int id_pedido = rs.getInt("pedido_idpedido");
                     int qtd = rs.getInt("produto_has_pedido.qtd");
                     double precototal = rs.getDouble("produto_has_pedido.precototal");
                     
-                    ItemPedido ip = new ItemPedido(cont, cod, id_produto, qtd, produto_nome, precototal);
+                    ItemPedido ip = new ItemPedido(cont, cod, id_produto, id_pedido, qtd, produto_nome, precototal);
                     ip.cadastrar();
                     lista.add(ip);
                     cont++;
@@ -144,6 +154,8 @@ public class ItemPedido {
         return lista;
         
     }
+
+    
     
     
     

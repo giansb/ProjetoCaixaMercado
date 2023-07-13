@@ -22,10 +22,10 @@ public class Janela extends javax.swing.JFrame {
     double subtotal =0;
     double itemtotal=0;
     String[] coluna = {"","","","",""};
-    
+    int id_pedido_h =0;
     int id_pedido = 0;
     
-    int cont;
+    int cont =0;
     
     
     
@@ -37,14 +37,16 @@ public class Janela extends javax.swing.JFrame {
         ArrayList<Pedido> lista = new ArrayList();
         lista = Pedido.getPedidos();
         
-        int id_pedido;
         
-        if(lista.size()<=0){
+        
+        if(lista.size()< 1){
             id_pedido = 0;
         }
         else{
             id_pedido = lista.size();
         }
+        
+        id_pedido = lista.size();
         
         Pedido pedido = new Pedido(id_pedido ,"","",0);
         
@@ -658,7 +660,6 @@ public class Janela extends javax.swing.JFrame {
         
         test = lista.size();
         
-        
         System.out.println(test);
         Pedido pedido = new Pedido(test ,"","",0);
         pedido.cadastrar();
@@ -667,8 +668,8 @@ public class Janela extends javax.swing.JFrame {
         if (model.getRowCount() > 0) {
             for (int i = model.getRowCount() - 1; i > -1; i--) {
         model.removeRow(i);
-    }
-}
+                    }
+            }
     }//GEN-LAST:event_imprimirpedidoActionPerformed
 
     private void pagamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pagamentoActionPerformed
@@ -713,9 +714,6 @@ public class Janela extends javax.swing.JFrame {
             lista = Produto.getProduto();
             jTextField3.setText("1");
             
-            
-            
-            
             try{
                 for(Produto p:lista){
                     if(p.getCodigo()== Integer.parseInt(jTextField1.getText())){
@@ -733,12 +731,23 @@ public class Janela extends javax.swing.JFrame {
                         
                         int qtd = Integer.parseInt(jTextField3.getText());
                         
+                        ArrayList<ItemPedido> list = new ArrayList();
+                        list = ItemPedido.getItensPedido();
+                        System.out.println(list.size());
+                        if(list.size()<1){
+                            id_pedido_h = 0;
+                            }
+                            else{
+                                id_pedido_h = list.size()+1;
+                            }
                         
                         
                         
                         
-                        ItemPedido ip = new ItemPedido(cont,id_pedido, pg.getCodigo(), qtd, pg.getNome(), pt  );
+                        ItemPedido ip = new ItemPedido(cont, list.size(), id_pedido,pg.getCodigo(), qtd, pg.getNome(), pt  );                 
                         ip.cadastrar();
+                        
+                        
                         
                         coluna[0] = String.valueOf(cont);
                         coluna[1] = pg.getNome();
@@ -746,18 +755,14 @@ public class Janela extends javax.swing.JFrame {
                         coluna[3] = jTextField3.getText();
                         coluna[4] = jLabel6.getText();
                         
-                        
                         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-                        
-                        
                         
                         model.addRow(coluna);
                         
-                        
                         cont++;
                         
-                    }
-                    
+                        
+                    } 
                 }
             }catch(Exception e){
                 JOptionPane.showMessageDialog(null, "codigo inválido ou produto não cadastrado.");
@@ -767,14 +772,51 @@ public class Janela extends javax.swing.JFrame {
 
     private void jTextField3KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField3KeyPressed
         if(evt.getKeyCode() == KeyEvent.VK_ENTER){
-            itemtotal = itemtotal * (Integer.parseInt(jTextField3.getText()) - 1);
-            jLabel6.setText(String.valueOf(pg.getPreco()* (Integer.parseInt(jTextField3.getText()))));
-            subtotal += itemtotal;
             DecimalFormat df = new DecimalFormat("#,###.00");
+            int qtd = (Integer.parseInt(jTextField3.getText()) - 1);
+            itemtotal = itemtotal * qtd;
+            jLabel6.setText(String.valueOf(df.format(itemtotal)));
+            subtotal += itemtotal;
+            
             jLabel15.setText(String.valueOf(df.format(subtotal)));
+            
+            
             coluna[3] = jTextField3.getText();
             coluna[4] = String.valueOf(jLabel6.getText());
             DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+            
+            
+            
+                            
+            ArrayList<ItemPedido> list = new ArrayList();
+                        list = ItemPedido.getItensPedido();
+                        int id_pedido_h =0;
+                        int id_pedido = 0;
+                        if(list.size()< 1){
+                            id_pedido_h = 0;
+                            }
+                            else{
+                                id_pedido_h = list.size()-1;
+                            }
+                        
+                   ArrayList<Pedido> lista = new ArrayList();
+                        lista = Pedido.getPedidos();
+                        
+                        if(lista.size()< 1){
+                            id_pedido = 0;
+                            }
+                            else{
+                                id_pedido = list.size()-1;
+                            }
+                            
+            
+            ItemPedido p = new ItemPedido(cont-1,id_pedido_h, id_pedido ,pg.getCodigo(), qtd, pg.getNome(), itemtotal  );
+            p.editar();
+            
+            
+            //atualzia na tabela o preco
+            model.removeRow(cont-1);
+            model.insertRow(cont-1, coluna);
             
         }
     }//GEN-LAST:event_jTextField3KeyPressed
