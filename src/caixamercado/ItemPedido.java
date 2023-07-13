@@ -13,6 +13,7 @@ import java.util.ArrayList;
  * @author gianb
  */
 public class ItemPedido {
+    private int id_has;
     private int id;
     private int idPedido;
     private int idProduto;
@@ -22,7 +23,8 @@ public class ItemPedido {
     
     
 
-    public ItemPedido(int id, int idPedido, int idProduto, int qntd, String produto_nome, double precoTotal) {
+    public ItemPedido(int id_has, int id, int idPedido, int idProduto, int qntd, String produto_nome, double precoTotal) {
+        this.id_has = id_has;
         this.id = id;
         this.idPedido = idPedido;
         this.idProduto = idProduto;
@@ -30,6 +32,16 @@ public class ItemPedido {
         this.produto_nome = produto_nome;
         this.precoTotal = precoTotal;
     }
+
+    public int getId_has() {
+        return id_has;
+    }
+
+    public void setId_has(int id_has) {
+        this.id_has = id_has;
+    }
+    
+    
 
     public String getProduto_nome() {
         return produto_nome;
@@ -81,12 +93,12 @@ public class ItemPedido {
     
     
     public void cadastrar(){
-        String sql = "INSERT into produto_has_pedido( qtd, precototal, produto_idproduto, pedido_idpedido) values( "
+        String sql = "INSERT into produto_has_pedido(id_produto_has_pedido, qtd, precototal, produto_idproduto, pedido_idpedido) values( "
+                + "" + this.getId_has() + ","
                 + "" + this.getQntd() + ","
                 + "" + this.getPrecoTotal() + ","
                 + "" + this.getIdProduto() + ","
                 + "" + this.getIdPedido() + ")";
-        System.out.println(sql);
         Conexao.executar(sql);
         
     } 
@@ -98,7 +110,7 @@ public class ItemPedido {
                 + "pedido_idpedido = " + this.getIdPedido() + ","
                 + "qtd = " +this.getQntd()+","
                 + "precototal = " + this.getPrecoTotal() + ""
-                + " WHERE id_produto_has_pedido = " + this.getId();
+                + " WHERE id_produto_has_pedido = " + this.getId_has();
         
         Conexao.executar(sql);
     } 
@@ -110,8 +122,8 @@ public class ItemPedido {
     
     public static ArrayList<ItemPedido> getItensPedido(){
         ArrayList<ItemPedido> lista = new ArrayList();
-        String sql = "SELECT produto_has_pedido.id_produto_has_Pedido, produto.nome, produto.idproduto, produto_has_pedido.qtd, produto_has_pedido.precototal FROM produto_has_pedido, produto "
-                + "WHERE produto_has_pedido.produto_idproduto = produto.idproduto "
+        String sql = "SELECT produto_has_pedido.id_produto_has_pedido,produto_has_pedido.pedido_idpedido, produto.nome, produto.idproduto,pedido.idpedido, produto_has_pedido.qtd, produto_has_pedido.precototal FROM produto_has_pedido, produto, pedido "
+                + " WHERE produto_has_pedido.pedido_idpedido = pedido.idpedido and produto_has_pedido.produto_idproduto = produto.idproduto"
                 + " ORDER BY id_produto_has_pedido";
         ResultSet rs = Conexao.consultar(sql);
         
@@ -120,19 +132,21 @@ public class ItemPedido {
                 int cont=0;
                 while(rs.next()){
                     
-                    int cod = rs.getInt("produto_has_pedido.id_produto_has_Pedido");
+                    int cod = rs.getInt("produto_has_pedido.id_produto_has_pedido");
                     String produto_nome = rs.getString("produto.nome");
                     int id_produto = rs.getInt("produto.idproduto");
-                    int id_pedido = rs.getInt("pedido_idpedido");
+                    int id_pedido = rs.getInt("pedido.idpedido");
                     int qtd = rs.getInt("produto_has_pedido.qtd");
                     double precototal = rs.getDouble("produto_has_pedido.precototal");
                     
-                    ItemPedido ip = new ItemPedido(cont, id_produto, id_pedido, qtd, produto_nome, precototal);
-                    ip.cadastrar();
+                    ItemPedido ip = new ItemPedido(cod,cont,id_produto, id_pedido, qtd, produto_nome, precototal);
+                    
                     lista.add(ip);
                     cont++;
+                    System.out.println(lista);
                     
                 }
+
             }catch(Exception e){
                 
             };

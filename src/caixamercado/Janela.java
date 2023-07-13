@@ -36,16 +36,7 @@ public class Janela extends javax.swing.JFrame {
         
         ArrayList<Pedido> lista = new ArrayList();
         lista = Pedido.getPedidos();
-        
-        
-        
-        if(lista.size()< 1){
-            id_pedido = 0;
-        }
-        else{
-            id_pedido = lista.size();
-        }
-        
+
         id_pedido = lista.size();
         
         Pedido pedido = new Pedido(id_pedido ,"","",0);
@@ -710,9 +701,13 @@ public class Janela extends javax.swing.JFrame {
         
         if(evt.getKeyCode() == KeyEvent.VK_ENTER){
             
+            
+            
             ArrayList<Produto> lista = new ArrayList();
             lista = Produto.getProduto();
             jTextField3.setText("1");
+            
+            
             
             try{
                 for(Produto p:lista){
@@ -731,12 +726,12 @@ public class Janela extends javax.swing.JFrame {
                         
                         int qtd = Integer.parseInt(jTextField3.getText());
                         
+                        
                         ArrayList<ItemPedido> list = new ArrayList();
                         list = ItemPedido.getItensPedido();
-                        System.out.println(list.size());
+                        id_pedido_h = list.size();
                         
-                        
-                        ItemPedido ip = new ItemPedido(cont, id_pedido,pg.getCodigo(), qtd, pg.getNome(), pt  );                 
+                        ItemPedido ip = new ItemPedido(id_pedido_h,cont, id_pedido,pg.getCodigo(), qtd, pg.getNome(), pt  );                 
                         ip.cadastrar();
                         
                         
@@ -765,10 +760,12 @@ public class Janela extends javax.swing.JFrame {
     private void jTextField3KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField3KeyPressed
         if(evt.getKeyCode() == KeyEvent.VK_ENTER){
             DecimalFormat df = new DecimalFormat("#,###.00");
-            int qtd = (Integer.parseInt(jTextField3.getText()) - 1);
+            int qtd = (Integer.parseInt(jTextField3.getText()) );
             itemtotal = itemtotal * qtd;
             jLabel6.setText(String.valueOf(df.format(itemtotal)));
-            subtotal += itemtotal;
+            subtotal += itemtotal- (itemtotal/qtd);
+            
+            
             
             jLabel15.setText(String.valueOf(df.format(subtotal)));
             
@@ -780,10 +777,10 @@ public class Janela extends javax.swing.JFrame {
             
             
                             
-            ArrayList<ItemPedido> list = new ArrayList();
+                        ArrayList<ItemPedido> list = new ArrayList();
                         list = ItemPedido.getItensPedido();
-                        int id_pedido_h =0;
                         int id_pedido = 0;
+                        
                         if(list.size()< 1){
                             id_pedido_h = 0;
                             }
@@ -802,7 +799,7 @@ public class Janela extends javax.swing.JFrame {
                             }
                             
             
-            ItemPedido p = new ItemPedido(cont-1, id_pedido ,pg.getCodigo(), qtd, pg.getNome(), itemtotal  );
+            ItemPedido p = new ItemPedido(id_pedido_h, id_pedido, id_pedido ,pg.getCodigo(), qtd, pg.getNome(), itemtotal  );
             p.editar();
             
             
