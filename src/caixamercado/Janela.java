@@ -734,17 +734,9 @@ public class Janela extends javax.swing.JFrame {
                         ArrayList<ItemPedido> list = new ArrayList();
                         list = ItemPedido.getItensPedido();
                         System.out.println(list.size());
-                        if(list.size()<1){
-                            id_pedido_h = 0;
-                            }
-                            else{
-                                id_pedido_h = list.size()+1;
-                            }
                         
                         
-                        
-                        
-                        ItemPedido ip = new ItemPedido(cont, list.size(), id_pedido,pg.getCodigo(), qtd, pg.getNome(), pt  );                 
+                        ItemPedido ip = new ItemPedido(cont, id_pedido,pg.getCodigo(), qtd, pg.getNome(), pt  );                 
                         ip.cadastrar();
                         
                         
@@ -810,7 +802,7 @@ public class Janela extends javax.swing.JFrame {
                             }
                             
             
-            ItemPedido p = new ItemPedido(cont-1,id_pedido_h, id_pedido ,pg.getCodigo(), qtd, pg.getNome(), itemtotal  );
+            ItemPedido p = new ItemPedido(cont-1, id_pedido ,pg.getCodigo(), qtd, pg.getNome(), itemtotal  );
             p.editar();
             
             
