@@ -78,8 +78,8 @@ public class Pedido {
                 + "tipo_pagamento = '" + this.getTipoPagamento() + "',"
                 + "cpf = '" + this.getCpf() + "',"
                 + "data = now(),"
-                +"total = " + this.getTotal() + ""
-                + "WHERE pedido.id = " + this.getId();
+                +"total = " + this.getTotal() + " "
+                + " WHERE pedido.idpedido = " + this.getId();
         Conexao.executar(sql);
     }
     

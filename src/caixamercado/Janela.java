@@ -24,8 +24,10 @@ public class Janela extends javax.swing.JFrame {
     String[] coluna = {"","","","",""};
     int id_pedido_h =0;
     int id_pedido = 0;
-    
+    double unsubtotal =0;
+    double subfinal =0;
     int cont =0;
+    double itempreco =0;
     
     
     
@@ -36,6 +38,7 @@ public class Janela extends javax.swing.JFrame {
         
         ArrayList<Pedido> lista = new ArrayList();
         lista = Pedido.getPedidos();
+        
 
         id_pedido = lista.size();
         
@@ -645,14 +648,27 @@ public class Janela extends javax.swing.JFrame {
 
     private void imprimirpedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_imprimirpedidoActionPerformed
         
+        
+        cont = 0;
+        
+        
+        
         ArrayList<Pedido> lista = new ArrayList();
         lista = Pedido.getPedidos();
-        int test = lista.size()- 1;
+        int test ;
+        if(lista.size()<1){
+            test =0;
+        }
+        else{
+            test=lista.size()-1;
+        }
         
-        test = lista.size();
         
+        
+        Pedido PE = new Pedido(test,"","",(subtotal+subfinal));
+        PE.editar();
         System.out.println(test);
-        Pedido pedido = new Pedido(test ,"","",0);
+        Pedido pedido = new Pedido(lista.size() ,"","",0);
         pedido.cadastrar();
         
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
@@ -661,6 +677,15 @@ public class Janela extends javax.swing.JFrame {
         model.removeRow(i);
                     }
             }
+        jLabel15.setText("00,00");
+        jLabel6.setText("00,00");
+        jLabel8.setText("00,00");
+        jLabel18.setText("");
+        jTextField1.setText("");
+        subtotal =0;
+        unsubtotal = 0;
+        subfinal =0;
+        
     }//GEN-LAST:event_imprimirpedidoActionPerformed
 
     private void pagamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pagamentoActionPerformed
@@ -701,7 +726,7 @@ public class Janela extends javax.swing.JFrame {
         
         if(evt.getKeyCode() == KeyEvent.VK_ENTER){
             
-            
+            subtotal += subfinal;
             
             ArrayList<Produto> lista = new ArrayList();
             lista = Produto.getProduto();
@@ -748,9 +773,11 @@ public class Janela extends javax.swing.JFrame {
                         
                         cont++;
                         
-                        
+                       itempreco = pt;
+           
                     } 
                 }
+                
             }catch(Exception e){
                 JOptionPane.showMessageDialog(null, "codigo inválido ou produto não cadastrado.");
             }
@@ -761,13 +788,20 @@ public class Janela extends javax.swing.JFrame {
         if(evt.getKeyCode() == KeyEvent.VK_ENTER){
             DecimalFormat df = new DecimalFormat("#,###.00");
             int qtd = (Integer.parseInt(jTextField3.getText()) );
-            itemtotal = itemtotal * qtd;
-            jLabel6.setText(String.valueOf(df.format(itemtotal)));
-            subtotal += itemtotal- (itemtotal/qtd);
+            double test = itemtotal * qtd;
+            //itempreco =0;
+            jLabel6.setText(String.valueOf(df.format(test)));
+            
+            if(qtd<=1){
+                unsubtotal = itempreco;
+            }
+            else{
+                unsubtotal = test ;
+            }
+            subfinal = unsubtotal - itemtotal;
             
             
-            
-            jLabel15.setText(String.valueOf(df.format(subtotal)));
+            jLabel15.setText(String.valueOf(df.format(subfinal+subtotal)));
             
             
             coluna[3] = jTextField3.getText();
@@ -781,29 +815,29 @@ public class Janela extends javax.swing.JFrame {
                         list = ItemPedido.getItensPedido();
                         int id_pedido = 0;
                         
-                        if(list.size()< 1){
+                        if(list.size()<1){
                             id_pedido_h = 0;
                             }
-                            else{
-                                id_pedido_h = list.size()-1;
+                        else{
+                                id_pedido_h = (list.size()-1);
                             }
+                        
                         
                    ArrayList<Pedido> lista = new ArrayList();
                         lista = Pedido.getPedidos();
                         
-                        if(lista.size()< 1){
-                            id_pedido = 0;
-                            }
-                            else{
-                                id_pedido = list.size()-1;
-                            }
+                        id_pedido = lista.size()-1;
                             
             
-            ItemPedido p = new ItemPedido(id_pedido_h, id_pedido, id_pedido ,pg.getCodigo(), qtd, pg.getNome(), itemtotal  );
+            ItemPedido p = new ItemPedido(id_pedido_h, cont-1, id_pedido ,pg.getCodigo(), qtd, pg.getNome(), unsubtotal );
+            System.out.println(id_pedido_h);
             p.editar();
             
             
+            
+            
             //atualzia na tabela o preco
+            
             model.removeRow(cont-1);
             model.insertRow(cont-1, coluna);
             
