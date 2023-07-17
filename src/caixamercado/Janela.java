@@ -446,6 +446,12 @@ public class Janela extends javax.swing.JFrame {
         jLabel17.setForeground(new java.awt.Color(255, 255, 255));
         jLabel17.setText("TOTAL RECEBIDO");
 
+        jTextField2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTextField2KeyPressed(evt);
+            }
+        });
+
         jLabel22.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel22.setForeground(new java.awt.Color(255, 255, 255));
         jLabel22.setText("R$");
@@ -717,6 +723,7 @@ public class Janela extends javax.swing.JFrame {
         unsubtotal = 0;
         subfinal =0;
         jComboBox1.setSelectedIndex(0);
+        jLabel21.setText("00,00");
         }
         
         
@@ -883,6 +890,20 @@ public class Janela extends javax.swing.JFrame {
         }
         System.out.println(pag);
     }//GEN-LAST:event_jComboBox1ActionPerformed
+
+    private void jTextField2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField2KeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+            double vr = Double.valueOf(jTextField2.getText());
+            double vt = subtotal+subfinal;
+            if(vr<vt){
+                JOptionPane.showMessageDialog(null, "valor recebido menor que total");
+            }
+            else{
+                double troco = vr-vt;
+                jLabel21.setText(String.valueOf(troco));
+            }
+        }
+    }//GEN-LAST:event_jTextField2KeyPressed
 
     /**
      * @param args the command line arguments
