@@ -16,7 +16,7 @@ public class Pedido {
     private int id;
     private String tipoPagamento;
     private String cpf;
-    
+    private String data;
     
     private double total;
 
@@ -25,11 +25,29 @@ public class Pedido {
         this.tipoPagamento = tipoPagamento;
         this.cpf = cpf;
         this.total = total;
-    }  
+    }
+    
+    public Pedido(int id, String tipoPagamento, String cpf, double total, String data){
+        this.id = id;
+        this.tipoPagamento = tipoPagamento;
+        this.cpf = cpf;
+        this.total = total;
+        this.data = data;
+        
+    }
 
     Pedido() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    public String getData() {
+        return data;
+    }
+
+    public void setData(String data) {
+        this.data = data;
+    }
+    
     
 
     public int getId() {
@@ -99,7 +117,8 @@ public class Pedido {
                     String tipo_pagamento = rs.getString("tipo_pagamento");
                     String cpf = rs.getString("cpf");
                     double total = rs.getDouble("total");
-                    Pedido p = new Pedido(codigo, tipo_pagamento, cpf, total);
+                    String data = rs.getString("data");
+                    Pedido p = new Pedido(codigo, tipo_pagamento, cpf, total,data);
                     lista.add(p);
                 }
             }catch(Exception e){
