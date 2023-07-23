@@ -39,11 +39,11 @@ Além de baixar, é recomendavel checar se o conector MySQL está dentro da past
 
 <img width="80%" src="https://github.com/giansb/ProjetoCaixaMercado/assets/107221898/0e380379-c19a-4e0b-b40a-156971809f1b"/>
 
-caso não esteja, baixe-o junto ao projeto na pasta dependências e em seguida adicione como arquivo jar.
+caso não esteja, o arquivo está dentro da pasta principal do projeto, basta apenas adicionar como arquivo jar.
 
 ## Banco de dados
 
-O banco de dados pode ser baixado junto ao projeto na pasta dependências, e exportado para o MySQL Workbench ou pelo Apache localhost, vai de sua preferencia.
+O banco de dados está junto na pasta principal do projeto, deve ser exportado pelo o MySQL Workbench ou pelo Apache localhost, vai de sua preferencia.
 
 Além disso, temos que abrir o XAMPP e checar se a porta do MySQL está em 3306.
 
